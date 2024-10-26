@@ -15,12 +15,12 @@ class Root extends Component{
 
           <input type="text" class="form-control flex-fill border-0 me-1" 
           placeholder="Add Your NewTask" aria-label="Add Your NewTask" 
-          aria-describedby="button-addon2"/>
+          aria-describedby="button-addon2" t-att-value="state.name" t-model='state.name'/>
 
           <input type="color" class="form-control-lg form-control-color border-0"
-           id="exampleColorInput" value="#563d7c" title="Choose your color"/>
+           id="exampleColorInput" t-att-value="state.color" title="Choose your color" t-model='state.color'/>
 
-          <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+          <button class="btn btn-outline-secondary" type="button" id="button-addon2" t-on-click="addTask">
             <i class="bi bi-plus-lg"></i>
           </button>
         </div>
@@ -54,12 +54,34 @@ class Root extends Component{
 
     `
     setup(){
-        this.tasks = useState([
-          {id:1,name:'Task1',color:'#ff0',isCompleted:false},
-          {id:2,name:'Task2',color:'#ff0',isCompleted:false},
-          {id:3,name:'Task3',color:'#ff0',isCompleted:false},
-        ])
+
+        this.state = useState({
+          name:"",
+          color:"fff000",
+          isCompleted:false,
+        })
+        this.tasks = useState([])
     }
+
+    
+    addTask(){
+      if(!this.tasks.name){
+        alert("Please Provide Name Of Task");
+        return
+      }
+      const id = Math.random().toString().substring(2,12);
+      this.tasks.push({
+        id:id,
+        name:this.state.name,
+        color:this.state.color,
+        isCompleted:this.state.isCompleted,
+      });
+
+      let state = this.state
+      this.state = {...state,name:"",color:"#fff000"}
+    }
+
+
 }
 
 mount(Root,document.getElementById('root'))
