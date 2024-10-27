@@ -2,12 +2,18 @@ const {Component,mount,xml,useState} = owl
 
 class Task extends Component{
   static template = xml`
-            <li t-attf-style="background-color:#{props.task.color}" class="d-flex align-itmes-center justify-content-between rounded border p-3 mb-3">
+        <li t-attf-style="background-color:#{props.task.color}" class="d-flex align-itmes-center justify-content-between rounded border p-3 mb-3">
           <div class="form-check form-switch fs-5">
-            <input class="form-check-input" type="checkbox" value="" t-att-id="props.task.id"/>
-            <label class="form-check-label" t-att-for="props.task.id">
+
+            <input class="form-check-input" type="checkbox" value="" 
+            t-att-checked="props.task.isCompleted" t-att-id="props.task.id"
+             t-on-click="toggleTask"/>
+
+            <label class="form-check-label" t-att-for="props.task.id"
+            t-attf-class="#{props.task.isCompleted ? 'text-decoration-line-through' : ''}">
               <t t-esc="props.task.name"/>
             </label>
+
           </div>
 
           <div>
@@ -19,9 +25,13 @@ class Task extends Component{
               <i class="bi bi-trash"></i>
             </button>
           </div>
-        </li>
+      </li>
   `
   static props = ['task']
+
+  toggleTask(){
+    this.props.task.isCompleted = !this.props.task.isCompleted;
+  }
 }
 
 class Root extends Component{
